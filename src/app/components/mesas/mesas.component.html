@@ -1,0 +1,84 @@
+<hr>
+<div id="lienzo">
+
+</div>
+<script>
+    // Lienzo SVG donde serán creados todos los objetos
+    let lienzo = SVG('lienzo').size('100%', '100%');
+
+    // Representa las mesas y las sillas del salón con sus atributos
+    let mesas = [{
+        color: '#f06',
+        posicion: {
+            x: 250,
+            y: 250
+        },
+        sillas: [{
+                numero: 1,
+                color: '#30f6ff',
+                ocupada: false,
+                posicion: {
+                    x: 30,
+                    y: 50
+                }
+            }, {
+                numero: 2,
+                color: '#30f6ff',
+                ocupada: true,
+                posicion: {
+                    x: 100,
+                    y: 10
+                }
+            }, {
+                numero: 3,
+                color: '#30f6ff',
+                ocupada: false,
+                posicion: {
+                    x: 180,
+                    y: 10
+                }
+            }, {
+                numero: 4,
+                color: '#30f6ff',
+                ocupada: true,
+                posicion: {
+                    x: 240,
+                    y: 50
+                }
+            }
+
+        ]
+    }]
+
+    // Se agregan dinámicamente las mesas y sus sillas
+    for (let mesa of mesas) {
+        let mesaFigura = lienzo.circle(200).attr({
+            fill: mesa.color
+        }).move(mesa.posicion.x, mesa.posicion.y);
+
+        for (let silla of mesa.sillas) {
+            let color = silla.ocupada ? mesa.color : silla.color;
+
+            let sillaFigura = lienzo.circle(30).attr({
+                fill: color
+            }).move(silla.posicion.x, silla.posicion.y);
+
+            sillaFigura.numero = silla.numero;
+
+            // Adjunta el evento click con su callback para responder por cada silla.
+            // Aquí se pueden enviar datos al servidor si se requiere.
+            sillaFigura.click(function() {
+                this.animate({
+                    ease: '<',
+                    delay: '0'
+                }).attr({
+                    fill: '#f06'
+                }).animate();
+
+                this.animate().move(400, 150);
+                console.log('Seleccionaste la silla: ' + this.numero);
+            });
+        }
+
+    }
+</script>
